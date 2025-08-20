@@ -1,0 +1,99 @@
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="text-info fw-bold text-uppercase fs-2">Student List</h2>
+    <button class="btn btn-primary px-4" (click)="openForm()">Add Student</button>
+  </div>
+
+  <div class="input-group mb-3 w-50">
+    <input type="text" class="form-control" [(ngModel)]="searchCourse" placeholder="Search by course">
+    <button class="btn btn-primary px-4" (click)="filterByCourse()">Search</button>
+  </div>
+
+  <div class="table-responsive shadow-sm">
+    <table class="table table-hover table-striped align-middle text-center">
+      <thead class="table-dark fw-semibold">
+        <tr>
+          <th scope="col">Name</th>
+          <th scope="col">Email</th>
+          <th scope="col">Course</th>
+          <th scope="col" style="width: 180px;">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of filteredStudents">
+          <td class="fw-semibold">{{ student.name }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.course }}</td>
+          <td>
+            <button class="btn btn-sm btn-warning me-2" (click)="editStudent(student)">Edit</button>
+            <button class="btn btn-sm btn-danger" (click)="deleteStudent(student.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div>
+      <button class="btn btn-success m-3 btn-sm me-2" (click)="downloadExcel()">Export to Excel</button>
+      <button class="btn btn-danger m-3 btn-sm" (click)="downloadPDF()">Export to PDF</button>
+    </div>
+  </div>
+
+  <app-student-form *ngIf="showForm" [editData]="editData" (formClose)="closeForm($event)">
+  </app-student-form>
+</div>
+
+<div>
+  <div class="container mt-4">
+    <h3 class="mb-3 fw-bold text-info">Merged Student List</h3>
+    <table class="table table-bordered table-hover table-striped shadow-sm">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Course</th>
+          <th>Phone</th>
+          <th>College</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let student of merge_list">
+          <td>{{ student.id }}</td>
+          <td>{{ student.name }}</td>
+          <td>{{ student.email }}</td>
+          <td>{{ student.course || 'N/A' }}</td>
+          <td>{{ student.phone || 'N/A' }}</td>
+          <td>{{ student.college || 'N/A' }}</td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="mt-4">
+    <h4 class="text-info fw-bold mb-3"> Students by Course </h4>
+    <table class="table table-bordered table-hover text-center">
+      <thead class="table-light">
+        <tr>
+          <th>Course</th>
+          <th>Number of Students</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let course of (courseCounts | keyvalue)">
+          <td>{{ course.key }}</td>
+          <td>{{ course.value }}</td>
+        </tr>
+      </tbody>
+      <tfoot class="table-light">
+        <tr class="fw-bold">
+          <td>Total Students</td>
+          <td>{{ getTotalMergedCount() }}</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
